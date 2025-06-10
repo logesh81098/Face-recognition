@@ -1,5 +1,6 @@
 module "s3" {
   source = "./module/s3"
+  Rekognition-Faceprints-arn = module.lambda-function.Rekognition-Faceprints-arn
 }
 
 module "iam" {
