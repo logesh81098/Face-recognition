@@ -60,3 +60,18 @@ resource "aws_lambda_function" "rekognition-faceprints" {
     Project = "Face Recognition"
   }
 }
+
+
+#################################################################################################################################
+#                                          Lambda Function Resource Based policy
+##################################################################################################################################
+
+#Lambda Function Resource Based policy to make s3 as trigger to lambda
+
+resource "aws_lambda_permission" "s3-trigger" {
+  statement_id = "s3-to-trigger-lambda"
+  function_name = aws_lambda_function.rekognition-faceprints.function_name
+  source_arn = var.source-s3-bucket-arn
+  action = "lambda:InvokeFunction"
+  principal = "s3.amazonaws.com"
+}

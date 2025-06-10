@@ -5,3 +5,7 @@ variable "rekognition-role-arn" {
 variable "rekognition-faceprints-role" {
   default = {}
 }
+
+variable "source-s3-bucket-arn" {
+  default = {}
+}
