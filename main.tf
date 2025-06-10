@@ -9,6 +9,7 @@ module "iam" {
 module "lambda-function" {
   source = "./module/lambda-function"
   rekognition-role-arn = module.iam.rekognition-role-arn
+  rekognition-faceprints-role = module.iam.rekognition-faceprints-role
 }
 
 module "dynamodb" {
