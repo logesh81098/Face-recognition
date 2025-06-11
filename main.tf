@@ -3,9 +3,11 @@ module "s3" {
   Rekognition-Faceprints-arn = module.lambda-function.Rekognition-Faceprints-arn
 }
 
+
 module "iam" {
   source = "./module/iam"
 }
+
 
 module "lambda-function" {
   source = "./module/lambda-function"
@@ -14,19 +16,31 @@ module "lambda-function" {
   source-s3-bucket-arn = module.s3.source-s3-bucket-arn
 }
 
+
 module "dynamodb" {
   source = "./module/dynamo-db"
 }
 
+
 module "vpc" {
   source = "./module/vpc"
 }
+
 
 module "security-group" {
   source = "./module/security-group"
   vpc-id = module.vpc.vpc-id
 }
 
+
 module "keypair" {
   source = "./module/keypair"
+}
+
+
+module "ec2-instance" {
+  source = "./module/ec2-instance"
+  subnet-id = module.vpc.subnet-1
+  security-group = module.security-group.security-group
+  keypair = module.keypair.keyname
 }
