@@ -17,3 +17,7 @@ module "lambda-function" {
 module "dynamodb" {
   source = "./module/dynamo-db"
 }
+
+module "vpc" {
+  source = "./module/vpc"
+}
