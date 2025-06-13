@@ -15,4 +15,18 @@ resource "aws_instance" "Face-recognition-server" {
     Name = "Face-Recognition-Server"
     Project = "Face Recognition"
   }
+  user_data = <<-EOF
+  #!bin/bash
+  sudo su
+  set -eux
+  dnf update -y
+  dnf upgrade -y
+  dnf install git -y
+  git --version
+  dnf install docker -y
+  systemctl enable docker
+  systemctl start docker
+  sleep 10
+  systemctl status docker
+  EOF
 }
