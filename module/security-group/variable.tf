@@ -13,3 +13,7 @@ variable "SSH-Port" {
 variable "anywhere-cidr" {
   default = "0.0.0.0/0"
 }
+
+variable "Application-port" {
+  default = "81"
+}
