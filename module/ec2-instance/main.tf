@@ -34,5 +34,7 @@ resource "aws_instance" "Face-recognition-server" {
   cd /
   git clone https://github.com/logesh81098/Face-recognition.git
   cd Face-recognition/
+  docker build -t face-rekognition-app
+  docker run -d -p 81:81 face-rekognition-app
   EOF
 }
