@@ -36,5 +36,6 @@ resource "aws_instance" "Face-recognition-server" {
   cd Face-recognition/
   docker build -t face-rekognition-app .
   docker run -d -p 81:81 face-rekognition-app
+  python3 upload-images-to-s3.py
   EOF
 }
