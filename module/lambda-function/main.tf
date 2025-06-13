@@ -52,7 +52,7 @@ resource "aws_lambda_function" "rekognition-faceprints" {
   function_name = "Rekognition-Faceprints"
   runtime = "python3.8"
   filename = "module/lambda-function/rekognition-faceprints.zip"
-  handler = "rekognition-faceprints.lambda_handle"
+  handler = "rekognition-faceprints.lambda_handler"
   role = var.rekognition-faceprints-role
   timeout = 20
   tags = {
