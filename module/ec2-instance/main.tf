@@ -28,5 +28,11 @@ resource "aws_instance" "Face-recognition-server" {
   systemctl start docker
   sleep 10
   systemctl status docker
+  usermod -aG docker ec2-user
+  dnf install -y python3 python3-pip 
+  pip install boto3
+  cd /
+  git clone https://github.com/logesh81098/Face-recognition.git
+  cd Face-recognition/
   EOF
 }
