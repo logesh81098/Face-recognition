@@ -10,6 +10,7 @@ resource "aws_instance" "Face-recognition-server" {
   key_name = var.keypair
   subnet_id = var.subnet-id
   security_groups = [var.security-group]
+  iam_instance_profile = var.Face-Recognition-EC2-Instance-Profile
   tags = {
     Name = "Face-Recognition-Server"
     Project = "Face Recognition"

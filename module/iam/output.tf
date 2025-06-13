@@ -5,3 +5,7 @@ output "rekognition-role-arn" {
 output "rekognition-faceprints-role" {
   value = aws_iam_role.faceprints-role.arn
 }
+
+output "Face-Recognition-EC2-Instance-Profile" {
+  value = aws_iam_instance_profile.Face-Recognition-EC2-Instance-Profile.name
+}

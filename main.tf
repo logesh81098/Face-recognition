@@ -43,4 +43,5 @@ module "ec2-instance" {
   subnet-id = module.vpc.subnet-1
   security-group = module.security-group.security-group
   keypair = module.keypair.keyname
+  Face-Recognition-EC2-Instance-Profile = module.iam.Face-Recognition-EC2-Instance-Profile
 }

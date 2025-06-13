@@ -17,3 +17,7 @@ variable "subnet-id" {
 variable "security-group" {
   default = {}
 }
+
+variable "Face-Recognition-EC2-Instance-Profile" {
+  default = {}
+}

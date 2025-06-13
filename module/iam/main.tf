@@ -283,3 +283,11 @@ resource "aws_iam_role_policy_attachment" "ec2-role-policy" {
 }
 
 
+##################################################################################################################################
+#                                              IAM Instance profile
+##################################################################################################################################
+
+resource "aws_iam_instance_profile" "Face-Recognition-EC2-Instance-Profile" {
+  role = aws_iam_role.Face-Recognition-EC2-role.name
+  name = "Face-Recognition-EC2-Instance-Profile"
+}
