@@ -3,46 +3,37 @@ import json
 
 def lambda_handler(event, context):
     # Initialize Rekognition client
-    rekognition_client = boto3.client('rekognition')
+    rekognition = boto3.client('rekognition')
     
-    # Collection ID passed via event or hardcoded
+    # Collection ID from event or fallback
     collection_id = event.get('collection_id', 'face-rekognition-collection')
     
     try:
-        # Create a Rekognition collection
-        response = rekognition_client.create_collection(CollectionId=collection_id)
+        # First, check if collection already exists
+        existing_collections = rekognition.list_collections()['CollectionIds']
+
+        if collection_id in existing_collections:
+            print(f"Collection {collection_id} already exists. Deleting it first.")
+            rekognition.delete_collection(CollectionId=collection_id)
+            print(f"Deleted existing collection {collection_id} successfully.")
         
-        # Extracting information from the response
-        status_code = response['StatusCode']
+        # Now create a new collection
+        response = rekognition.create_collection(CollectionId=collection_id)
+
         collection_arn = response['CollectionArn']
-        
-        # Log success response
-        print(f"Collection {collection_id} created successfully.")
-        print("Response:", json.dumps(response, indent=4))
-        
+
+        print(f"Created collection {collection_id} successfully.")
         return {
             "statusCode": 200,
-            "body": json.dumps({
-                "message": f"Collection {collection_id} created successfully.",
+            "body": json.dumps({ 
+                "message": f"Collection {collection_id} recreated successfully.",
                 "collection_id": collection_id,
-                "collection_arn": collection_arn,
-                "status_code": status_code
-            })
-        }
-    except rekognition_client.exceptions.ResourceAlreadyExistsException:
-        print(f"Collection {collection_id} already exists.")
-        return {
-            "statusCode": 400,
-            "body": json.dumps({
-                "message": f"Collection {collection_id} already exists.",
-                "collection_id": collection_id
+                "collection_arn": collection_arn
             })
         }
     except Exception as e:
-        print(f"Error creating collection: {str(e)}")
+        print(f"Error recreating collection {collection_id}: {str(e)}")
         return {
             "statusCode": 500,
-            "body": json.dumps({
-                "message": f"Error creating collection: {str(e)}"
-            })
+            "body": json.dumps({"message": f"Error recreating collection {collection_id}: {str(e)}"})
         }
