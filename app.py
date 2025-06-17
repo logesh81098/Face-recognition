@@ -25,8 +25,10 @@ def index():
 
             # Call Rekognition to search faces
             response = rekognition.search_faces_by_image(
-                CollectionId='face-rekognition-collection-id',
-                Image={'Bytes': image_binary}
+                CollectionId='face-rekognition-collection',
+                Image={'Bytes': image_binary},
+                FaceMatchThreshold=80,  # drops to 80% match instead of 95%
+                MaxFaces=5
             )
 
             # Handle no matches
