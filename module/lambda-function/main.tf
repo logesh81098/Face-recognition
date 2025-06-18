@@ -28,6 +28,20 @@ resource "aws_lambda_function" "rekognition-collection-id" {
     Name = "Rekognition-Collection-ID"
     Project = "Face Recognition"
   }
+  
+}
+
+#################################################################################################################################
+#                                                        Invoke Lambda Function
+##################################################################################################################################
+
+#Invoking the Rekognition collection id lambda to create a collection id
+resource "aws_lambda_invocation" "invoke-rekogntion-lambda" {
+  function_name = aws_lambda_function.rekognition-collection-id.function_name
+  input = jsonencode({
+    "collection_id" = "face-rekognition-collection"
+    
+  })
 }
 
 
@@ -59,6 +73,7 @@ resource "aws_lambda_function" "rekognition-faceprints" {
     Name = "Rekognition-Faceprints"
     Project = "Face Recognition"
   }
+  depends_on = [ aws_lambda_invocation.invoke-rekogntion-lambda ]
 }
 
 
