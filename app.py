@@ -42,7 +42,7 @@ def index():
 
                 face = dynamodb.get_item(
                     TableName='face-prints-table',
-                    Key={'RekognitionId': {'S': face_id}}
+                    Key={'Rekognitionid': {'S': face_id}}
                 )
 
                 if 'Item' in face:

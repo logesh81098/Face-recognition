@@ -1,8 +1,8 @@
 import boto3
-from decimal import Decimal
 import json
 import urllib.parse
 import os
+import re
 
 print('Loading function')
 
@@ -10,27 +10,41 @@ dynamodb = boto3.client('dynamodb')
 s3 = boto3.client('s3')
 rekognition = boto3.client('rekognition')
 
-# Environment variables for table and collection
+# Environment variables
 DYNAMODB_TABLE = os.getenv('DYNAMODB_TABLE', 'Faceprints-Table')
 REKOGNITION_COLLECTION = os.getenv('REKOGNITION_COLLECTION', 'face-rekognition-collection')
 
+
+def sanitize_external_image_id(key):
+    """
+    Rekognition ExternalImageId must match: [a-zA-Z0-9_.\-:]
+    This function strips all invalid characters.
+    """
+    return re.sub(r'[^a-zA-Z0-9_.\-:]', '_', key)
+
+
 def index_faces(bucket, key):
     try:
+        sanitized_id = sanitize_external_image_id(key)
+
         response = rekognition.index_faces(
             Image={"S3Object": {"Bucket": bucket, "Name": key}},
-            CollectionId=REKOGNITION_COLLECTION
+            CollectionId=REKOGNITION_COLLECTION,
+            ExternalImageId=sanitized_id,
+            DetectionAttributes=[]
         )
         return response
     except Exception as e:
         print(f"Error in index_faces: {e}")
         raise
 
+
 def update_index(table_name, face_id, full_name):
     try:
         response = dynamodb.put_item(
             TableName=table_name,
             Item={
-                'Rekognitionid': {'S': face_id},  # Fixed key name
+                'Rekognitionid': {'S': face_id},
                 'FullName': {'S': full_name}
             }
         )
@@ -38,6 +52,7 @@ def update_index(table_name, face_id, full_name):
     except Exception as e:
         print(f"Error in update_index: {e}")
         raise
+
 
 def lambda_handler(event, context):
     try:
@@ -52,7 +67,7 @@ def lambda_handler(event, context):
             print(f"Processing object: s3://{bucket}/{key}")
 
             response = index_faces(bucket, key)
-            
+
             if response['ResponseMetadata']['HTTPStatusCode'] == 200:
                 face_records = response.get('FaceRecords', [])
                 if not face_records:
@@ -61,6 +76,7 @@ def lambda_handler(event, context):
 
                 for face_record in face_records:
                     face_id = face_record['Face']['FaceId']
+
                     object_metadata = s3.head_object(Bucket=bucket, Key=key)
                     person_full_name = object_metadata['Metadata'].get('fullname', 'Unknown')
 
@@ -69,8 +85,9 @@ def lambda_handler(event, context):
             else:
                 print(f"Error indexing faces. Response: {response}")
                 return {'statusCode': 500, 'body': 'Error indexing faces.'}
-                
+
         return {'statusCode': 200, 'body': 'Processing completed.'}
+
     except Exception as e:
         print(f"Error processing event: {e}")
         return {'statusCode': 500, 'body': f"Error processing event: {e}"}

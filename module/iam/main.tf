@@ -147,7 +147,9 @@ resource "aws_iam_policy" "faceprints-policy" {
     "Sid": "IndexesFace",
     "Effect": "Allow",
     "Action": [
-      "rekognition:IndexFaces"
+      "rekognition:IndexFaces",
+      "rekognition:SearchFacesByImage",
+      "rekognition:ListFaces"
     ],
     "Resource": "arn:aws:rekognition:*:*:collection/*"
   },
