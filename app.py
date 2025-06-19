@@ -33,7 +33,7 @@ def index():
             image_file = request.files['image_path']
             if not image_file or not image_file.filename.lower().endswith(('jpg', 'jpeg', 'png')):
                 logging.warning("Invalid file type uploaded.")
-                return render_template('result.html', error="Invalid file type. Please upload a valid image.")s
+                return render_template('result.html', error="Invalid file type. Please upload a valid image.")
 
             # Read image into memory
             image = Image.open(image_file)
