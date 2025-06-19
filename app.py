@@ -23,7 +23,7 @@ dynamodb = boto3.client('dynamodb', region_name='us-east-1')
 
 # Constants (must match Lambda + DynamoDB config)
 REKOGNITION_COLLECTION = 'face-rekognition-collection'
-DYNAMODB_TABLE = 'face-prints-table'
+DYNAMODB_TABLE = 'Faceprints-Table'
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -33,7 +33,7 @@ def index():
             image_file = request.files['image_path']
             if not image_file or not image_file.filename.lower().endswith(('jpg', 'jpeg', 'png')):
                 logging.warning("Invalid file type uploaded.")
-                return render_template('result.html', error="Invalid file type. Please upload a valid image.")
+                return render_template('result.html', error="Invalid file type. Please upload a valid image.")s
 
             # Read image into memory
             image = Image.open(image_file)

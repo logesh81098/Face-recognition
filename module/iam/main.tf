@@ -246,7 +246,7 @@ resource "aws_iam_policy" "face-rekogntion-ec2-policy" {
             "Action": [
                 "dynamodb:*"
             ],
-            "Resource": "arn:aws:dynamodb:*:*:table/Faceprints-Table"
+            "Resource": "arn:aws:dynamodb:*:*:*"
         },
         {
             "Sid": "RekognitionIndexFace",
