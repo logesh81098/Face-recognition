@@ -294,3 +294,114 @@ resource "aws_iam_instance_profile" "Face-Recognition-EC2-Instance-Profile" {
   role = aws_iam_role.Face-Recognition-EC2-role.name
   name = "Face-Recognition-EC2-Instance-Profile"
 }
+
+
+
+#################################################################################################################################
+#                                                         IAM Role
+##################################################################################################################################
+
+#IAM Role for EKS Cluster
+
+resource "aws_iam_role" "eks-cluster-role" {
+  name = "Face-Rekognition-EKS-Cluster-Role"
+  description = "IAM Role created for Face Rekognition EKS Cluster"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+  {
+        "Effect": "Allow",
+        "Principal": {
+            "Service": "eks.amazonaws.com"
+        },
+        "Action": "sts:AssumeRole"
+    }
+  ]
+}  
+EOF
+  tags = {
+    Name = "Face-Rekognition-EKS-Cluster-Role"
+    Project = "Face Recognition"
+  }
+}
+
+
+#################################################################################################################################
+#                                                         IAM Policy
+##################################################################################################################################
+
+#IAM policy for EKS Cluster
+
+resource "aws_iam_role_policy_attachment" "eks-cluster-service-policy" {
+  role = aws_iam_role.eks-cluster-role.id
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "eks-cluster-policy" {
+  role = aws_iam_role.eks-cluster-role.id
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "eks-face-rekognition-policy" {
+  role = aws_iam_role.eks-cluster-role.id
+  policy_arn = aws_iam_policy.face-rekogntion-ec2-policy.arn
+}
+
+
+
+#################################################################################################################################
+#                                                         IAM Role
+##################################################################################################################################
+
+#IAM Role for EKS Worker Node
+
+resource "aws_iam_role" "eks-worker-node" {
+  name = "Face-Rekognition-EKS-Worker-Node-Role"
+  description = "IAM Role created for Face Rekognition EKS Cluster"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      }
+    }
+  ]
+}  
+EOF
+  tags = {
+    Name = "Face-Rekognition-EKS-Worker-Node-Role"
+    Project = "Face Recogntion"
+  }
+}
+
+
+#################################################################################################################################
+#                                                         IAM Policy
+##################################################################################################################################
+
+#IAM policy for EKS Worker Node
+
+resource "aws_iam_role_policy_attachment" "eks-worker-node-face-rekognition" {
+  role = aws_iam_role.eks-worker-node.id
+  policy_arn = aws_iam_policy.face-rekogntion-ec2-policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "eks-cni-policy" {
+    role = aws_iam_role.eks-worker-node.id
+    policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+}
+
+resource "aws_iam_role_policy_attachment" "eks-worker-node-policy" {
+  role = aws_iam_role.eks-worker-node.id
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "eks-container-registry-read-only" {
+  role = aws_iam_role.eks-worker-node.id
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
