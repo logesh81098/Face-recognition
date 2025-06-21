@@ -45,3 +45,10 @@ module "ec2-instance" {
   keypair = module.keypair.keyname
   Face-Recognition-EC2-Instance-Profile = module.iam.Face-Recognition-EC2-Instance-Profile
 }
+
+module "launch-template" {
+  source = "./module/launch-template"
+  key-pair = module.keypair.keyname
+  security-group = module.security-group.security-group
+  subnet-1 = module.vpc.subnet-1
+}
