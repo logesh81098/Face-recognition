@@ -52,3 +52,11 @@ module "launch-template" {
   security-group = module.security-group.security-group
   subnet-1 = module.vpc.subnet-1
 }
+
+module "eks-cluster" {
+  source = "./module/eks"
+  cluster-role = module.iam.Face-Rekognition-EKS-Cluster-Role-ARN
+  security-groups = module.security-group.security-group
+  subnet-1 = module.vpc.subnet-1
+  subnet-2 = module.vpc.subnet-2
+}
