@@ -6,9 +6,12 @@
 
 resource "aws_vpc" "Face-Recognition-vpc" {
   cidr_block = var.vpc-cidr
+  enable_dns_hostnames = true
+  enable_dns_support = true
   tags = {
     Name = "Face-Recognition-vpc"
     Project = "Face Recognition"
+    "kubernetes.io/cluster/Face-Rekognition-Cluster" = "shared"
   }
 }
 
@@ -24,6 +27,8 @@ resource "aws_subnet" "public-subnet-1" {
   tags = {
     Name = "Face-Recognition-public-subnet-1"
     Project = "Face Recognition"
+    "kubernetes.io/cluster/Face-Rekognition-Cluster" = "owned"
+    "kubernetes.io/role/elb" = "1"
   }
 }
 
@@ -36,6 +41,8 @@ resource "aws_subnet" "public-subnet-2" {
   tags = {
     Name = "Face-Recognition-public-subnet-2"
     Project = "Face Recognition"
+    "kubernetes.io/cluster/Face-Rekognition-Cluster" = "owned"
+    "kubernetes.io/role/elb" = "1"
   }
 }
 

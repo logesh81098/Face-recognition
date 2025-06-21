@@ -28,6 +28,13 @@ resource "aws_security_group" "Face-Recognition-SG" {
     cidr_blocks = [var.anywhere-cidr]
     description = "Ingress docker port connection from anywhere"
   }
+  ingress {
+    from_port = var.From-Port-Node-to-Node
+    to_port = var.To-Port-Node-to-Node
+    protocol = "tcp"
+    description = "Node-to-node communication"
+    self = true
+  }
   egress {
     from_port = 0
     to_port = 0

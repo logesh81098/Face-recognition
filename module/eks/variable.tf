@@ -25,3 +25,11 @@ variable "launch-template-id" {
 variable "ami-id" {
   default = "ami-0953476d60561c955"
 }
+
+variable "from-port" {
+  default = "1025"
+}
+
+variable "to-port" {
+  default = "65535"
+}

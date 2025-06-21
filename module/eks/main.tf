@@ -17,6 +17,26 @@ resource "aws_eks_cluster" "face-rekognition-cluster" {
   }
 }
 
+data "aws_eks_cluster" "cluster" {
+  name = aws_eks_cluster.face-rekognition-cluster.name
+}
+
+
+##################################################################################################################################
+#                                         Security Group rule for EKS Node Group
+##################################################################################################################################
+
+#Security Group rule for EKS Node Group
+
+resource "aws_security_group_rule" "EKS-SG" {
+  type = "ingress"
+  from_port = var.from-port
+  to_port = var.to-port
+  protocol = "tcp"
+  security_group_id = var.security-groups
+  source_security_group_id = data.aws_eks_cluster.cluster.vpc_config[0].cluster_security_group_id
+  description = "Allow EKS control plane to access worker nodes"
+}
 
 ##################################################################################################################################
 #                                                EKS Node Group
@@ -43,3 +63,4 @@ resource "aws_eks_node_group" "face-rekognition-nodegroup" {
     Project = "Face Recognition"
   }
 }
+

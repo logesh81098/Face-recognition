@@ -17,3 +17,11 @@ variable "anywhere-cidr" {
 variable "Application-port" {
   default = "81"
 }
+
+variable "From-Port-Node-to-Node" {
+  default = "0"
+}
+
+variable "To-Port-Node-to-Node" {
+  default = "65535"
+}
