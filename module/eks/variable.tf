@@ -13,3 +13,15 @@ variable "subnet-2" {
 variable "security-groups" {
   default = {}
 }
+
+variable "nodegroup-role" {
+  default = {}
+}
+
+variable "launch-template-id" {
+  default = {}
+}
+
+variable "ami-id" {
+  default = "ami-0953476d60561c955"
+}

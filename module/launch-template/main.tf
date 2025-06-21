@@ -11,8 +11,12 @@ resource "aws_launch_template" "eks-node-group" {
   key_name = var.key-pair
   network_interfaces {
     security_groups = [var.security-group]
-    subnet_id = var.subnet-1
   }
+   user_data = <<-EOF
+  #!bin/bash
+  sudo su
+  /etc/eks/bootstrap.sh Face-Rekognition-Cluster
+  EOF
   tag_specifications {
     resource_type = "instance"
     tags = {
