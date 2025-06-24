@@ -59,4 +59,6 @@ module "eks-cluster" {
   security-groups = module.security-group.security-group
   subnet-1 = module.vpc.subnet-1
   subnet-2 = module.vpc.subnet-2
+  node-group-role-arn = module.iam.Face-Rekognition-EKS-Worker-Node-Role-arn
+  launch-template-id = module.launch-template.launch-template-id
 }

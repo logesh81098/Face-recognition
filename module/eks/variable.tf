@@ -13,3 +13,11 @@ variable "subnet-2" {
 variable "security-groups" {
   default = {}
 }
+
+variable "node-group-role-arn" {
+  default = {}
+}
+
+variable "launch-template-id" {
+  default = {}
+}
