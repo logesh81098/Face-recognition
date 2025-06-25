@@ -17,3 +17,11 @@ variable "anywhere-cidr" {
 variable "Application-port" {
   default = "81"
 }
+
+variable "from-port-node-to-cluster" {
+  default = "0"
+}
+
+variable "to-port-node-to-cluster" {
+  default = "10250"
+}

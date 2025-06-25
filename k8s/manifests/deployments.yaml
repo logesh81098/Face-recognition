@@ -1,0 +1,32 @@
+###############################################################################################################
+# Deployment file to deploy Face Rekognition application
+###############################################################################################################
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: face-rekognition-deployment
+  labels:
+    app: face-rekognition-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: face-rekognition-app
+  template:
+    metadata:
+      labels:
+        app: face-rekognition-app
+    spec:
+      containers:
+        - name: face-rekognition-app
+          image: logeshshanmugavel/face-rekognition-app:latest  # Update with your image name and tag
+          ports:
+            - containerPort: 81  
+          env:
+            - name: AWS_REGION
+              value: "us-east-1" 
+            - name: DYNAMODB_TABLE
+              value: "Faceprints-Table"  
+            - name: REKOGNITION_COLLECTION
+              value: "face-rekognition-collection" 
