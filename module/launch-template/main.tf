@@ -6,12 +6,9 @@
 
 resource "aws_launch_template" "eks-node-group" {
   name = "Face-Rekognition-launch-template"
-  image_id = var.ami-id
-  instance_type = var.instance-type
   key_name = var.key-pair
   network_interfaces {
     security_groups = [var.security-group]
-    subnet_id = var.subnet-1
   }
   tag_specifications {
     resource_type = "instance"
